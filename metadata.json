@@ -1,0 +1,6 @@
+{
+  "name": "MotoDash GPS — Motorcycle Cockpit & Ride Logger",
+  "description": "Glove-friendly landscape motorcycle GPS speedometer, live route map, ride telemetry logger, and installable PWA / Android cockpit dashboard.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

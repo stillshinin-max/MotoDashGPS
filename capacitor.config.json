@@ -1,0 +1,9 @@
+{
+  "appId": "com.azeemfamily.bikegps",
+  "appName": "Family Bike GPS",
+  "webDir": "dist",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https"
+  }
+}

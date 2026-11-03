@@ -1,0 +1,54 @@
+name: Build Android APK (Family Bike GPS)
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Set up JDK 21 for Android Gradle
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install web dependencies & build production bundle
+        run: |
+          npm install
+          npm run build
+
+      - name: Add Capacitor Android & configure GPS permissions
+        run: |
+          npm install --no-save @capacitor/core @capacitor/cli @capacitor/android
+          npx cap add android
+          # Inject precise GPS & WakeLock permissions into AndroidManifest.xml
+          MANIFEST="android/app/src/main/AndroidManifest.xml"
+          if ! grep -q "ACCESS_FINE_LOCATION" "$MANIFEST"; then
+            sed -i 's|<uses-permission android:name="android.permission.INTERNET" />|<uses-permission android:name="android.permission.INTERNET" />\n    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />\n    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />\n    <uses-permission android:name="android.permission.WAKE_LOCK" />\n    <uses-feature android:name="android.hardware.location.gps" android:required="false" />|' "$MANIFEST"
+          fi
+          npx cap sync android
+
+      - name: Build installable Android APK
+        working-directory: android
+        run: ./gradlew assembleDebug
+
+      - name: Rename and Upload FamilyBikeGPS.apk Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: FamilyBikeGPS-Android-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk

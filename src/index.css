@@ -1,0 +1,110 @@
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --font-display: 'Barlow Condensed', sans-serif;
+    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    overscroll-behavior: none;
+  }
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-mono-tabular {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Custom Leaflet Cockpit Styling */
+.leaflet-container {
+  font-family: var(--font-sans);
+  background-color: #0d131f;
+}
+
+html:not(.dark) .leaflet-container {
+  background-color: #e2e8f0;
+}
+
+.family-bike-dark-tiles .leaflet-tile-pane {
+  filter: invert(92%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+
+.leaflet-control-attribution {
+  font-size: 10px !important;
+  background: rgba(15, 23, 42, 0.65) !important;
+  color: #94a3b8 !important;
+  backdrop-filter: blur(4px);
+  border-radius: 4px 0 0 0;
+  padding: 2px 6px !important;
+}
+
+.leaflet-control-attribution a {
+  color: #cbd5e1 !important;
+}
+
+/* 3D Cockpit Perspective & Immersive Navigation */
+.leaflet-3d-scene {
+  perspective: 850px;
+  overflow: hidden;
+  transform-style: preserve-3d;
+}
+
+.leaflet-3d-plane {
+  will-change: transform;
+  transform-origin: 50% 68%;
+  transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.25, 1);
+  transform-style: preserve-3d;
+}
+
+/* Horizon Sky & Atmospheric Fade in 3D Mode */
+.horizon-atmosphere-dark {
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 15, 26, 0.96) 0%,
+    rgba(10, 15, 26, 0.6) 20%,
+    rgba(10, 15, 26, 0.15) 45%,
+    transparent 65%
+  );
+  pointer-events: none;
+}
+
+.horizon-atmosphere-light {
+  background: linear-gradient(
+    to bottom,
+    rgba(226, 232, 240, 0.96) 0%,
+    rgba(226, 232, 240, 0.6) 20%,
+    rgba(226, 232, 240, 0.15) 45%,
+    transparent 65%
+  );
+  pointer-events: none;
+}
+
+/* 3D Rider Marker & Headlight Beam */
+.bike-rider-3d-beacon {
+  filter: drop-shadow(0 6px 10px rgba(2, 132, 199, 0.65));
+}
+
+@keyframes radar-pulse {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+.radar-pulse-ring {
+  animation: radar-pulse 2.2s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
+}
